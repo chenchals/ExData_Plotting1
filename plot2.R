@@ -23,15 +23,31 @@ DT<-fread("data/household_power_consumption.txt", sep = ";",skip=nRowsToSkip, nr
 setnames(DT,names(DT),names(DT_0))
 rm(DT_0)
 
-################ Transform Data if necessary and plot #########################
-# transform data if needed use: DT<-DT[,Voltage:=as.numeric(Voltage)] etc
-# Plot
-with(DT,plot(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),Global_active_power, type = "n", ylab="Global Active Power (kilowatts)",xlab=""))
-with(DT,lines(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),Global_active_power), lty=1)
+############# Sun-Functions to create plot on Screen or Device ################
+# Functions need to be declared before using
 
-################ Copy plot to PNG device ######################################
-dev.copy(png,"plot2.png",width=480,height=480)
-dev.off()
+## Function: plotFig creates the plots on the device of choice
+#            called by createFig function since the resolution on screen and device are different
+plotFig<-function(){
+  with(DT,plot(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),Global_active_power, type = "n", ylab="Global Active Power (kilowatts)",xlab=""))
+  with(DT,lines(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),Global_active_power), lty=1)
+}
+
+## Function: createFig function calls plotFig after setting the device of choice
+createFig<-function(x="screen", file){
+  #default is screen
+  if(x=="png"){
+    png(file=file,width=480,height=480, type="quartz")
+  }
+  plotFig()
+  if(x!="screen"){
+    dev.off()
+  }
+}
+################ Create plot on device (default=screen) #######################
+createFig()
+createFig("png",file="plot2.png")
+
 
 
 

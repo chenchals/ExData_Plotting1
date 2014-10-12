@@ -23,21 +23,32 @@ DT<-fread("data/household_power_consumption.txt", sep = ";",skip=nRowsToSkip, nr
 setnames(DT,names(DT),names(DT_0))
 rm(DT_0)
 
-################ Transform Data if necessary and plot #########################
-# transform data if needed use: DT<-DT[,Voltage:=as.numeric(Voltage)] etc
-# Plot
-cols=c("black","red","blue")
-with(DT,plot(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),DT[[7]], type = "n", ylab="Energy sub metering",xlab=""))
-for (i in 1:3){
-  # lines for cols: 7 through 9, offset = 6, col=cols[i]
-  with(DT,lines(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),DT[[i+6]], lty=1, col=cols[i]))
+############# Sun-Functions to create plot on Screen or Device ################
+# Functions need to be declared before using
+
+## Function: plotFig creates the plots on the device of choice
+#            called by createFig function since the resolution on screen and device are different
+plotFig<-function(){
+  cols=c("black","red","blue")
+  with(DT,plot(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),DT[[7]], type = "n", ylab="Energy sub metering",xlab=""))
+  for (i in 1:3){
+    # lines for cols: 7 through 9, offset = 6, col=cols[i]
+    with(DT,lines(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),DT[[i+6]], lty=1, col=cols[i]))
+  }
+  legend("topright", lty=1, col=cols, legend=names(DT)[7:9])
 }
-legend("topright", lty=1, col=cols, legend=names(DT)[7:9])
 
-################ Copy plot to PNG device ######################################
-dev.copy(png,"plot3.png",width=480,height=480)
-dev.off()
-
-
-
-
+## Function: createFig function calls plotFig after setting the device of choice
+createFig<-function(x="screen", file){
+  #default is screen
+  if(x=="png"){
+    png(file=file,width=480,height=480, type="quartz")
+  }
+  plotFig()
+  if(x!="screen"){
+    dev.off()
+  }
+}
+################ Create plot on device (default=screen) #######################
+createFig()
+createFig("png",file="plot3.png")
