@@ -17,9 +17,9 @@ nRowsToSkip=difftime(skipTillDateTime,firstDateTime, units="mins")+1
 ## minutes in 2 days
 nRowsToRead=24*60*2 
 #read header for col names, 
-DT_0<-fread("data/household_power_consumption.txt", sep = ";", nrows=0) 
+DT_0<-fread("household_power_consumption.txt", sep = ";", nrows=0) 
 ## read data for days; numeric not coerced due to "?" in data
-DT<-fread("data/household_power_consumption.txt", sep = ";",skip=nRowsToSkip, nrows=nRowsToRead ) 
+DT<-fread("household_power_consumption.txt", sep = ";",skip=nRowsToSkip, nrows=nRowsToRead ) 
 setnames(DT,names(DT),names(DT_0))
 rm(DT_0)
 
