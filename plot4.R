@@ -54,7 +54,7 @@ plotFig<-function(){
 createFig<-function(x="screen", file){
   #default is screen
   if(x=="png"){
-    png(file=file,width=480,height=480, type="quartz")
+    png(file=file,width=480,height=480)
   }
   plotFig()
   if(x!="screen"){
