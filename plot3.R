@@ -1,6 +1,6 @@
-## plot1.R
-# Read data should be in a separate file, instead of copying the same lines.
+## plot3.R
 
+# Read data should be in a separate file, instead of copying the same lines.
 ################ Read Data necessary for this plot ############################
 # Data source: https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip
 # Download prior to analysis
@@ -26,10 +26,18 @@ rm(DT_0)
 ################ Transform Data if necessary and plot #########################
 # transform data if needed use: DT<-DT[,Voltage:=as.numeric(Voltage)] etc
 # Plot
-hist(DT$Global_active_power,main="Global Active Power",xlab="Global Active Power (kilowatts)", col="red")
+cols=c("black","red","blue")
+with(DT,plot(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),DT[[7]], type = "n", ylab="Energy sub metering",xlab=""))
+for (i in 1:3){
+  # lines for cols: 7 through 9, offset = 6, col=cols[i]
+  with(DT,lines(strptime(paste(DT$Date,DT$Time),"%d/%m/%Y %H:%M:%S"),DT[[i+6]], lty=1, col=cols[i]))
+}
+legend("topright", lty=1, col=cols, legend=names(DT)[7:9])
 
 ################ Copy plot to PNG device ######################################
-dev.copy(png,"plot1.png",width=480,height=480)
+dev.copy(png,"plot3.png",width=480,height=480)
 dev.off()
+
+
 
 
