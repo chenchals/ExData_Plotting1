@@ -22,7 +22,7 @@ setnames(DT,names(DT),names(DT_0))
 rm(DT_0)
 # transform data as needed use:
 # DT<-DT[,Voltage:=as.numeric(Voltage)] etc
-hist(DT$Global_active_power,main="Global Active Power",xlab="Global Active Power (kilowatt)", col="red")
+hist(DT$Global_active_power,main="Global Active Power",xlab="Global Active Power (kilowatts)", col="red")
 #copy figure to PNG device
 dev.copy(png,"plot1.png",width=480,height=480)
 dev.off()
